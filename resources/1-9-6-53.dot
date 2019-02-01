@@ -1,0 +1,15 @@
+digraph {
+  bgcolor = transparent;
+  rankdir = LR;
+  subgraph cluster_low {
+    label="low level"
+    symbols, iterables, generators
+  }
+  subgraph cluster_high {
+    label="high level"
+    async, asyncgen
+  }
+  symbols -> iterables -> generators -> async
+  async -> asyncgen
+  asyncgen [label="asynchronous\ngenerator"]
+}

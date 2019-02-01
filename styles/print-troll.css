@@ -1,0 +1,53 @@
+#troll {
+  position: absolute;
+  bottom: -100%;
+  left: 0;
+  width: 45px;
+  height: 45px;
+  background-image: url(../resources/images/angry.png);
+  background-size: contain;
+  transition: left 0.5s ease, bottom 0.5s ease;
+  z-index: 1;
+}
+
+.angry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.angry:before {
+  height: 50px;
+  width: 50px;
+  background-image: url(../resources/images/angry.png);
+  background-size: contain;
+  display: block;
+  content: "";
+  margin-right: 10px;
+  margin-left: -40px;
+}
+
+.bubble {
+  background-color: darkgreen;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: 'Freckle Face';
+  position: relative;
+  margin-left: 10px;
+}
+
+.bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 1.313em solid transparent;
+	border-right-color: darkgreen;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -0.656em;
+	margin-left: -1.312em;
+}

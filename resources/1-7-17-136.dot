@@ -1,0 +1,9 @@
+
+digraph {
+  bgcolor=transparent;
+  rankdir=LR;
+  e1 -> e2 -> e3 -> e4
+  e4 -> finish
+  e4 -> throw
+  e1, e2, e3, e4 [label="event"]
+}

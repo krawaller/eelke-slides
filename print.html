@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Blowing up the generator</title>
+
+  <link rel="icon" type="image/x-icon" href="mc2/images/favicon.ico">
+
+  <link rel="stylesheet" href="mc2/styles/print.css">
+<link rel="stylesheet" href="mc2/styles/print-code.css">
+  <link rel="stylesheet" href="styles/print-freckleface.css">
+<link rel="stylesheet" href="styles/print-minifix.css">
+<link rel="stylesheet" href="styles/print-troll.css">
+  
+</head>
+<body>
+
+<div id="bodycontainer">
+  <div id="frontpage">
+    <h1>Blowing up the generator</h1>
+    <div class="splash"><p>Exploring new(ish) JS concepts</p>
+</div>
+    <img class="logo" src="mc2/images/edument_logo_blue.svg">
+  </div>
+  <div id="footer">
+    <span id="delivery">Stratiteq 2018-10-22</span>
+    <span id="copyright">&copy; Edument 2019</span>
+  </div>
+  <div id="overview">
+    <h2>Course overview</h2>
+    <div class="overviewlist"><div class="detailedoverview"><div><h4><span>1.</span> Blowing up the generator</h4><ol><li>Welcome</li><li>Setting the scene</li><li>The extension problem</li><li>Symbols</li><li>Iterators and iterables</li><li>Generator functions</li><li>Promises</li><li>Asynchronous functions</li><li>Asynchronous generators</li><li>Learn more</li></ol></div></div><div></div></div>
+  </div>
+  <div id="slides">
+    <div class="chaptercontainer">
+  <div class="chapterstart">
+    <span>chapter 1 / 1</span>
+    <h2>Blowing up the generator</h2>
+    <p>Exploring new(ish) JS stuff</p>
+  </div>
+  
+  <div class="chaptersectionlist">
+  <h3>Sections in this chapter:</h3>
+  <ul>
+    <li>1. Welcome</li>
+<li>2. Setting the scene</li>
+<li>3. The extension problem</li>
+<li>4. Symbols</li>
+<li>5. Iterators and iterables</li>
+<li>6. Generator functions</li>
+<li>7. Promises</li>
+<li>8. Asynchronous functions</li>
+<li>9. Asynchronous generators</li>
+<li>10. Learn more</li>
+  </ul>
+</div>
+
+  <div class="chaptersections">
+    <section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-1.</span> Welcome</h3>
+      <p>...to the jungle?</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-1-1">
+<span class="pos">1-1-1</span>
+<div class="slidecontent"><p>Hello Stratiteq! :)</p>
+</div></section><section class="slide" data-pos="1-1-2">
+<span class="pos">1-1-2</span>
+<div class="slidecontent"><p>Meet <strong>Edument</strong>!</p>
+<p><img src="resources/1-1-2-19.svg" alt="dot"></p>
+<p><a href="https://www.edument.se">https://www.edument.se</a></p>
+</div></section><section class="slide" data-pos="1-1-3">
+<span class="pos">1-1-3</span>
+<div class="slidecontent"><p>Meet <strong>me</strong>!</p>
+<p><img src="resources/1-1-3-14.svg" alt="dot"></p>
+<p><a href="https://blog.krawaller.se">https://blog.krawaller.se</a></p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-2.</span> Setting the scene</h3>
+      <p>JS vocabulary</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-2-1">
+<span class="pos">1-2-1</span>
+<div class="slidecontent"><p>The <strong>ECMASCript versions</strong>:</p>
+<p><img src="resources/1-2-1-30.svg" alt="dot"></p>
+</div></section><section class="slide" data-pos="1-2-2">
+<span class="pos">1-2-2</span>
+<div class="slidecontent"><p>The <strong>TC39 process</strong>:</p>
+<p><img src="resources/1-2-2-23.svg" alt="dot"></p>
+</div></section><section class="slide" data-pos="1-2-3">
+<span class="pos">1-2-3</span>
+<div class="slidecontent"><p>Current <strong>proposal count</strong> (as of 2018-10-22):</p>
+<p><img src="resources/1-2-3-48.svg" alt="dot"></p>
+</div></section><section class="slide" data-pos="1-2-4">
+<span class="pos">1-2-4</span>
+<div class="slidecontent"><p>The plan for today: </p>
+<p><img src="resources/1-2-4-22.svg" alt="dot"></p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-3.</span> The extension problem</h3>
+      <p>Just to get us started</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-3-1">
+<span class="pos">1-3-1</span>
+<div class="slidecontent"><p>Imagine that we have a group of objects called <strong><code>X</code></strong>.</p>
+<p>We want all of them to have <strong><code>weirdMethod</code></strong>.</p>
+</div></section><section class="slide list" data-pos="1-3-2">
+<span class="pos">1-3-2</span>
+<div class="slidecontent">
+<p>We&#39;ll wade through <strong>7 failed attempts</strong>...</p>
+<ul>
+<li><span>a</span>class</li>
+<li><span>b</span>object prototype</li>
+<li><span>c</span>dedicated prototype</li>
+<li><span>d</span>fixed dedicated prototype</li>
+<li><span>e</span>exchanged prototype</li>
+<li><span>f</span>static</li>
+<li><span>g</span>factory</li>
+</ul>
+</div></section><section class="slide num numA" data-pos="1-3-3">
+<span class="pos">1-3-3</span>
+<div class="slidecontent">
+<p>Can supply it as a <strong>class</strong></p>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WeirdClass</span> </span>{
+  weirdMethod() {
+    <span class="hljs-comment">// weird method implementation</span>
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-4">
+<span class="pos">1-3-4</span>
+<div class="slidecontent"><p>And then <strong>inherit</strong> from that:</p>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">X</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WeirdClass</span> </span>{
+  <span class="hljs-comment">// other stuff</span>
+}
+</code></pre>
+<p>Now our <strong><code>X</code> instances</strong> have the method:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> x = <span class="hljs-keyword">new</span> X(some, instantiation, values);
+x.weirdMethod(); <span class="hljs-comment">// win!</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-5">
+<span class="pos">1-3-5</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-comment">// Not legal syntax :(</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">X</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WeirdClass</span> <span class="hljs-title">and</span> <span class="hljs-title">AnotherWeirdClass</span> </span>{
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<div class="angry">
+Classes are verbose<br/>
+and stupid and limited!<br/>
+What if I need<br/>
+<code>AnotherWeirdMethod</code>
+</div></div></section><section class="slide num numB" data-pos="1-3-6">
+<span class="pos">1-3-6</span>
+<div class="slidecontent">
+<p>Ok, more JS:y way, we use <strong>prototype</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">Object</span>.prototype.weirdMethod = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-comment">// weird method implementation</span>
+};
+</code></pre>
+<p>Now our object literals have it:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> x = {
+  <span class="hljs-comment">// stuff in here</span>
+};
+
+x.weirdMethod(); <span class="hljs-comment">// win!</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-7">
+<span class="pos">1-3-7</span>
+<div class="slidecontent"><pre><code class="lang-javascript">anotherObject.weirdMethod <span class="hljs-comment">// &lt;-- Boo!</span>
+</code></pre>
+<div class="angry">
+Now <strong>every</strong> object has<br/>
+<code>weirdMethod</code>!
+</div></div></section><section class="slide num numC" data-pos="1-3-8">
+<span class="pos">1-3-8</span>
+<div class="slidecontent">
+<p>Ok, <strong>dedicated prototype</strong> just for our x-literals:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> weirdProto = {
+  weirdMethod(){
+    <span class="hljs-comment">// weird method implementation</span>
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-9">
+<span class="pos">1-3-9</span>
+<div class="slidecontent"><p>Make x:s from those:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> x = <span class="hljs-built_in">Object</span>.create(weirdProto);
+x.foo = <span class="hljs-string">"bar"</span>; <span class="hljs-comment">// add other stuff that i want</span>
+</code></pre>
+<p>Now x has method:</p>
+<pre><code class="lang-javascript">x.weirdMethod(); <span class="hljs-comment">// win!</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-10">
+<span class="pos">1-3-10</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> x){
+  <span class="hljs-keyword">if</span> (x.hasOwnProperty(prop)){ <span class="hljs-comment">// have to filter out weirdMethod</span>
+    <span class="hljs-comment">// stuff</span>
+  }
+}
+</code></pre>
+<div class="angry">
+Now I can&#39;t loop<br/>
+without crying
+</div></div></section><section class="slide num numD" data-pos="1-3-11">
+<span class="pos">1-3-11</span>
+<div class="slidecontent">
+<p>Fine. We <strong>configure the <code>weirdMethod</code></strong> better:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> weirdProto = {};
+<span class="hljs-built_in">Object</span>.defineProperty(
+  weirdProto, <span class="hljs-string">'weirdMethod'</span>,{
+    <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// &lt;-- won't turn up in loops!</span>
+    value: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+      <span class="hljs-comment">// weird method implementation</span>
+    }
+  }
+);
+</code></pre>
+<p>Now u can loop! Win!</p>
+</div></section><section class="slide" data-pos="1-3-12">
+<span class="pos">1-3-12</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-keyword">let</span> x = <span class="hljs-built_in">Object</span>.create(weirdProto);
+x.someProp = something;
+x.anotherProp = somethingElse;
+<span class="hljs-comment">// ...this is SO VERBOSE OMG</span>
+</code></pre>
+<div class="angry">
+No, boo! I want to use<br/>
+object literals to<br/>
+create my <code>X</code>!
+</div></div></section><section class="slide num numE" data-pos="1-3-13">
+<span class="pos">1-3-13</span>
+<div class="slidecontent">
+<p>Ok, declare it as a literal then simply <strong>switch out the prototype</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> x = {
+  <span class="hljs-attr">someProp</span>: something,
+  <span class="hljs-comment">// ....and the rest of the stuff</span>
+};
+<span class="hljs-built_in">Object</span>.setPrototypeOf(x, weirdProto);
+x.weirdMethod(); <span class="hljs-comment">// WIN!</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-14">
+<span class="pos">1-3-14</span>
+<div class="slidecontent"><p><img src="resources/images/dummy.png" alt=""></p>
+<div class="angry">
+Not win! Boo! MDN<br/>
+says I&#39;m a dummy</br>
+if I do that!
+</div></div></section><section class="slide num numF" data-pos="1-3-15">
+<span class="pos">1-3-15</span>
+<div class="slidecontent">
+<p>You know you could simply make a <strong>static method</strong>, right?</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> weirdMethod = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>)</span>{
+  <span class="hljs-comment">// do the weird thing with `x` instead of `this`</span>
+}
+</code></pre>
+<p>And use it like so:</p>
+<pre><code class="lang-javascript">weirdMethod(x); <span class="hljs-comment">// WIN</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-16">
+<span class="pos">1-3-16</span>
+<div class="slidecontent"><pre><code class="lang-javascript">weirdMethod(x); <span class="hljs-comment">// WIN</span>
+</code></pre>
+<div class="angry">
+Not win! Boo!<br/>
+</div></div></section><section class="slide" data-pos="1-3-17">
+<span class="pos">1-3-17</span>
+<div class="slidecontent"><div class="angry">
+...ok, actually pretty good.<br/>
+And very JS:y.<br/>
+But I WANT IT ON THE OBJECT!
+</div></div></section><section class="slide num numG" data-pos="1-3-18">
+<span class="pos">1-3-18</span>
+<div class="slidecontent">
+<p>Fine. Here&#39;s a <strong>factory</strong> that <strong>adds <code>weirdMethod</code></strong> to a literal:</p>
+<pre><code class="lang-typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Xify</span>(<span class="hljs-params">obj</span>)</span>{
+  <span class="hljs-keyword">return</span> {
+    ...obj,
+    weirdMethod(){
+      <span class="hljs-comment">// weirdMethod implementation</span>
+    }
+  };
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-19">
+<span class="pos">1-3-19</span>
+<div class="slidecontent"><p>Now you can <strong>define as literal</strong> and pass to factory:</p>
+<pre><code class="lang-typescript"><span class="hljs-keyword">let</span> x = Xify({
+  someProp: <span class="hljs-string">'someValue'</span>,
+  <span class="hljs-comment">// ...</span>
+});
+x.weirdMethod(); <span class="hljs-comment">// WIN</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-3-20">
+<span class="pos">1-3-20</span>
+<div class="slidecontent"><pre><code class="lang-typescript"><span class="hljs-keyword">let</span> x = Xify({
+  someProp: <span class="hljs-string">'someValue'</span>,
+  <span class="hljs-comment">// ...</span>
+});
+x.weirdMethod(); <span class="hljs-comment">// WIN</span>
+</code></pre>
+<div class="angry">
+Butbutbut what about<br/>
+name clashes?!
+</div></div></section><section class="slide" data-pos="1-3-21">
+<span class="pos">1-3-21</span>
+<div class="slidecontent"><p>Good point! That&#39;s <strong>exactly</strong> what symbols let us fix!</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-4.</span> Symbols</h3>
+      <p>The new primitive</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-4-1">
+<span class="pos">1-4-1</span>
+<div class="slidecontent"><p>So - <strong>Symbols</strong>! </p>
+<p>We <strong>create</strong> them by calling <code>Symbol</code> global:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> sym = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">'some description'</span>);
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-2">
+<span class="pos">1-4-2</span>
+<div class="slidecontent"><p>Symbols are <strong>always unique</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> sym = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">'some description'</span>);
+<span class="hljs-keyword">let</span> sym2 = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">'some description'</span>);
+<span class="hljs-built_in">console</span>.log(sym === sym2); <span class="hljs-comment">// false</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-3">
+<span class="pos">1-4-3</span>
+<div class="slidecontent"><p>Symbols are a <strong>new type</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">typeof</span> sym); <span class="hljs-comment">// "symbol"</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-4">
+<span class="pos">1-4-4</span>
+<div class="slidecontent"><p>They can be <strong>keys in objects</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-attr">foo</span>: <span class="hljs-string">"bar"</span>,
+  <span class="hljs-attr">baz</span>: <span class="hljs-string">"bin"</span>,
+  [sym]: <span class="hljs-string">"secret"</span>
+};
+
+<span class="hljs-built_in">console</span>.log(obj[sym]); <span class="hljs-comment">// "secret"</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-5">
+<span class="pos">1-4-5</span>
+<div class="slidecontent"><p>They <strong>don&#39;t show up</strong> in <strong>for loops</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> obj){
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${prop}</span> = <span class="hljs-subst">${obj[prop]}</span>`</span>); <span class="hljs-comment">// foo = bar, baz = bin</span>
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-6">
+<span class="pos">1-4-6</span>
+<div class="slidecontent"><p>Nor in <strong>normal iteration API:s</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Object</span>.keys(obj)); <span class="hljs-comment">// ["foo","baz"]</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Object</span>.values(obj)); <span class="hljs-comment">// ["bar","bin"]</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Object</span>.entries(obj)); <span class="hljs-comment">// [["foo","bar],["baz","bin]]</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-7">
+<span class="pos">1-4-7</span>
+<div class="slidecontent"><div class="angry">
+Seems TOTALLY pointless
+</div></div></section><section class="slide" data-pos="1-4-8">
+<span class="pos">1-4-8</span>
+<div class="slidecontent"><p>For everyday use, maybe.</p>
+<p>But Symbols let us <strong>extend the language safely</strong>, and <strong>clean up the spec</strong>!</p>
+</div></section><section class="slide" data-pos="1-4-9">
+<span class="pos">1-4-9</span>
+<div class="slidecontent"><p>Example!</p>
+<p>You know how <strong><code>.concat</code></strong> adds the element...</p>
+<pre><code class="lang-javascript">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>].concat({<span class="hljs-attr">foo</span>:<span class="hljs-string">"bar"</span>}) <span class="hljs-comment">// [1, 2, {foo: "bar"}]</span>
+</code></pre>
+<p>...but spreads them if it is an array:</p>
+<pre><code class="lang-javascript">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>].concat([<span class="hljs-string">"baz"</span>,<span class="hljs-string">"bin"</span>]); <span class="hljs-comment">// [1, 2, "baz", "bin"]</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-10">
+<span class="pos">1-4-10</span>
+<div class="slidecontent"><pre><code class="lang-javascript">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>].concat([[<span class="hljs-string">"baz"</span>,<span class="hljs-string">"bin"</span>]]) <span class="hljs-comment">// [1, 2, ["baz", "bin"]]</span>
+</code></pre>
+<div class="angry">
+Yes, annoying! Have to<br/>
+wrap arrays in an array<br/>
+if I want to prevent it
+</div></div></section><section class="slide" data-pos="1-4-11">
+<span class="pos">1-4-11</span>
+<div class="slidecontent"><p>Before, <code>.concat</code> worked by <strong>type-checking</strong>.</p>
+<p>Now it <strong>uses a symbol</strong>!</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">"baz"</span>, <span class="hljs-string">"bin"</span>];
+arr[<span class="hljs-built_in">Symbol</span>.isConcatSpreadable] = <span class="hljs-literal">false</span>;
+[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>].concat(arr) <span class="hljs-comment">// [1, 2, ["baz", "bin"]]</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-4-12">
+<span class="pos">1-4-12</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-built_in">Symbol</span>.isConcatSpreadable
+</code></pre>
+<p>The symbols exposed on <code>Symbol</code>, like <code>isConcatSpreadable</code>,
+are called <strong>well-known symbols</strong>.</p>
+</div></section><section class="slide" data-pos="1-4-13">
+<span class="pos">1-4-13</span>
+<div class="slidecontent"><div class="angry">
+Still not impressed
+</div></div></section><section class="slide" data-pos="1-4-14">
+<span class="pos">1-4-14</span>
+<div class="slidecontent"><p>That&#39;s fine!</p>
+<p>Symbols aren&#39;t that great on their own, but what&#39;s cool is what they <strong>make possible</strong>!</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-5.</span> Iterators and iterables</h3>
+      <p>Protocols ftw</p>
+    </div>
+  </section>
+  <section class="slide list" data-pos="1-5-1">
+<span class="pos">1-5-1</span>
+<div class="slidecontent">
+<p>Here&#39;s what we&#39;ll learn about:</p>
+<ul>
+<li><span>a</span>iterator protocol</li>
+<li><span>b</span>iterable protocol</li>
+<li><span>c</span>usages by other API:s</li>
+</ul>
+</div></section><section class="slide num numA" data-pos="1-5-2">
+<span class="pos">1-5-2</span>
+<div class="slidecontent">
+<p>An object is an <strong>iterator</strong> if it...</p>
+<ul>
+<li>has a <strong><code>.next()</code></strong> method</li>
+<li>that behaves in a certain way</li>
+</ul>
+</div></section><section class="slide" data-pos="1-5-3">
+<span class="pos">1-5-3</span>
+<div class="slidecontent"><p>Calling <code>.next()</code> should <strong>return an object</strong> with the next <strong><code>value</code></strong>:</p>
+<pre><code class="lang-javascript">{ <span class="hljs-attr">value</span>: someValue } <span class="hljs-comment">// someValue can be anything</span>
+</code></pre>
+<p>...or, if we are <strong><code>done</code></strong>:</p>
+<pre><code class="lang-javascript">{ <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span> }
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-4">
+<span class="pos">1-5-4</span>
+<div class="slidecontent"><p>You can imagine both props always being present:</p>
+<pre><code class="lang-javascript">{ <span class="hljs-attr">value</span>: someValue, <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span> }
+</code></pre>
+<p>...and:</p>
+<pre><code class="lang-javascript">{ <span class="hljs-attr">value</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span> }
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-5">
+<span class="pos">1-5-5</span>
+<div class="slidecontent"><p>An object that has a <code>.next()</code> method that behaves in this way is said to implement the <strong>iterator protocol</strong>.</p>
+<p>Such an object is an <strong>iterator</strong>.</p>
+</div></section><section class="slide num numB" data-pos="1-5-6">
+<span class="pos">1-5-6</span>
+<div class="slidecontent">
+<p>Now for the <strong>iterable protocol</strong>!</p>
+<p>To implement it, an object must <strong>expose an iterator provider function</strong> via the well-known <code>Symbol.iterator</code>.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterable = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]() {
+    <span class="hljs-comment">// ...iterator implementation</span>
+    <span class="hljs-keyword">return</span> iteratorObject;
+  },
+  <span class="hljs-comment">// ...other props</span>
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-7">
+<span class="pos">1-5-7</span>
+<div class="slidecontent"><p>Here&#39;s an <strong>example</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterable = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]() {
+    <span class="hljs-keyword">let</span> vals = [
+      {<span class="hljs-attr">value</span>:<span class="hljs-string">"first"</span>},
+      {<span class="hljs-attr">value</span>:<span class="hljs-string">"last"</span>},
+      {<span class="hljs-attr">done</span>:<span class="hljs-literal">true</span>}
+    ];
+    <span class="hljs-keyword">return</span> {
+      next() {
+        <span class="hljs-keyword">return</span> vals.shift();
+      }
+    }
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-8">
+<span class="pos">1-5-8</span>
+<div class="slidecontent"><p>We could <strong>manually get the values</strong> like this:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterator = iterable[<span class="hljs-built_in">Symbol</span>.iterator]();
+iterator.next(); <span class="hljs-comment">// {value: "first"}</span>
+iterator.next(); <span class="hljs-comment">// {value: "last"}</span>
+iterator.next(); <span class="hljs-comment">// {done: true}</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-9">
+<span class="pos">1-5-9</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterator = iterable[<span class="hljs-built_in">Symbol</span>.iterator]();
+iterator.next(); <span class="hljs-comment">// {value: "first"}</span>
+iterator.next(); <span class="hljs-comment">// {value: "last"}</span>
+iterator.next(); <span class="hljs-comment">// {done: true}</span>
+</code></pre>
+<div class="angry">
+That&#39;s the dumbest thing<br/>
+I&#39;ve seen in YEARS
+</div></div></section><section class="slide num numC" data-pos="1-5-10">
+<span class="pos">1-5-10</span>
+<div class="slidecontent">
+<p>Thing is, the API is <strong>used by other stuff</strong>!</p>
+<p>Like the ES6 <strong><code>for..of</code> loop</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> iterable){
+  <span class="hljs-built_in">console</span>.log(elem); <span class="hljs-comment">// "first", "last"</span>
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-5-11">
+<span class="pos">1-5-11</span>
+<div class="slidecontent"><p>As well as the <strong>spread syntax</strong>...</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">console</span>.log( [<span class="hljs-string">"foo"</span>, ...iterable] ); <span class="hljs-comment">// ["foo", "first", "last"]</span>
+</code></pre>
+<p>...and others!</p>
+</div></section><section class="slide" data-pos="1-5-12">
+<span class="pos">1-5-12</span>
+<div class="slidecontent"><p>Again: <code>Symbol</code> is a <strong>foundation</strong> for other cool stuff!</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-6.</span> Generator functions</h3>
+      <p>The low-level API</p>
+    </div>
+  </section>
+  <section class="slide list" data-pos="1-6-1">
+<span class="pos">1-6-1</span>
+<div class="slidecontent">
+<p>We have arrived! Time to learn about...</p>
+<ul>
+<li><span>a</span>Generator object</li>
+<li><span>b</span>Generator function</li>
+</ul>
+</div></section><section class="slide num numA" data-pos="1-6-2">
+<span class="pos">1-6-2</span>
+<div class="slidecontent">
+<p>A generator object...</p>
+<ul>
+<li>implements <strong>iterator</strong> protocol</li>
+<li>implements <strong>iterable</strong> protocol</li>
+<li>has some other methods too</li>
+</ul>
+</div></section><section class="slide" data-pos="1-6-3">
+<span class="pos">1-6-3</span>
+<div class="slidecontent"><p>Something like this!</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> almostGeneratorObject = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+  next() {
+    <span class="hljs-comment">// return generator object</span>
+  }
+}
+</code></pre>
+</div></section><section class="slide num numB" data-pos="1-6-4">
+<span class="pos">1-6-4</span>
+<div class="slidecontent">
+<p>Now - <strong>generator function</strong>! it...</p>
+<ul>
+<li>is <strong>created with <code>function*</code></strong> syntax</li>
+<li><strong>returns a generator object</strong> when called</li>
+<li><strong>doesn&#39;t execute the body</strong> when called</li>
+<li><strong>proceeds to the next <code>yield</code></strong> for each <code>.next()</code></li>
+</ul>
+</div></section><section class="slide" data-pos="1-6-5">
+<span class="pos">1-6-5</span>
+<div class="slidecontent"><ul>
+<li><strong>doesn&#39;t execute the body</strong> when called</li>
+<li><strong>proceeds to the next <code>yield</code></strong> for each <code>.next()</code></li>
+</ul>
+<div class="angry">
+WHAAAAT?!
+</div></div></section><section class="slide" data-pos="1-6-6">
+<span class="pos">1-6-6</span>
+<div class="slidecontent"><p>Ok ok! Remember the <strong>iterable example</strong>?</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterable = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]() {
+    <span class="hljs-keyword">let</span> vals = [
+      {<span class="hljs-attr">value</span>:<span class="hljs-string">"first"</span>},
+      {<span class="hljs-attr">value</span>:<span class="hljs-string">"last"</span>},
+      {<span class="hljs-attr">done</span>:<span class="hljs-literal">true</span>}
+    ];
+    <span class="hljs-keyword">return</span> {
+      next() {
+        <span class="hljs-keyword">return</span> vals.shift();
+      }
+    }
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-6-7">
+<span class="pos">1-6-7</span>
+<div class="slidecontent"><p>Here it is <strong>written as a generator</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterable = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]: <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>)</span>{
+    <span class="hljs-keyword">yield</span> <span class="hljs-string">"first"</span>;
+    <span class="hljs-keyword">yield</span> <span class="hljs-string">"last"</span>;
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-6-8">
+<span class="pos">1-6-8</span>
+<div class="slidecontent"><p>In other words, the <strong>generator function</strong> is simply a syntactic sugar to <strong>write iterators more easily</strong>!</p>
+</div></section><section class="slide" data-pos="1-6-9">
+<span class="pos">1-6-9</span>
+<div class="slidecontent"><p>What we <strong>haven&#39;t covered</strong>...</p>
+<ul>
+<li>Generator objects also have<ul>
+<li><strong><code>.return(val)</code></strong> </li>
+<li><strong><code>.throw(error)</code></strong></li>
+</ul>
+</li>
+<li>We can <code>return</code> in a generator to finish</li>
+<li>We can pass values to a generator</li>
+</ul>
+<p>...But <strong>stories for another day</strong>!</p>
+</div></section><section class="slide" data-pos="1-6-10">
+<span class="pos">1-6-10</span>
+<div class="slidecontent"><div class="angry">
+Whatev. Generators seem<br/>
+rather useless
+</div></div></section><section class="slide" data-pos="1-6-11">
+<span class="pos">1-6-11</span>
+<div class="slidecontent"><p>Yup!</p>
+<p>Generators aren&#39;t that great on their own, but what&#39;s cool is what they <strong>make possible</strong>!</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-7.</span> Promises</h3>
+      <p>Give me your word!</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-7-1">
+<span class="pos">1-7-1</span>
+<div class="slidecontent"><p>In JS we usually deal with asynchronisity via <strong>callbacks</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> bigRedBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'doomsdayBtn'</span>);
+<span class="hljs-keyword">const</span> clickHandler = <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">'BOOM'</span>);
+
+bigRedBtn.addEventListener(<span class="hljs-string">'click'</span>, clickHandler); <span class="hljs-comment">// &lt;--- callback!</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-2">
+<span class="pos">1-7-2</span>
+<div class="slidecontent"><p>A callback is simply a function that will (potentially) <strong>call back</strong> at some point in the future.</p>
+</div></section><section class="slide" data-pos="1-7-3">
+<span class="pos">1-7-3</span>
+<div class="slidecontent"><p>Sometimes we need to call back with <strong>success or failure</strong>. NodeJS popularised the following pattern:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> fileHandler = <span class="hljs-function">(<span class="hljs-params">err, buffer</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'OH NO :/ '</span> + err);
+  }
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'file contents: '</span>, buffer.toString());
+}
+
+fs.readFile(filepath, fileHandler);
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-4">
+<span class="pos">1-7-4</span>
+<div class="slidecontent"><p>A <strong>Promises</strong> is an alternative solution to handling future success/failure.</p>
+<p>Instead of taking a callback, an async operation can syncronously return a promise that will eventually <strong>resolve or reject</strong>.</p>
+</div></section><section class="slide" data-pos="1-7-5">
+<span class="pos">1-7-5</span>
+<div class="slidecontent"><p>This translates to the following <strong>state transition</strong>:</p>
+<p><img src="resources/1-7-5-56.svg" alt="dot"></p>
+</div></section><section class="slide" data-pos="1-7-6">
+<span class="pos">1-7-6</span>
+<div class="slidecontent"><p>The user...</p>
+<ul>
+<li>synchronously gets the promise</li>
+<li>attaches callbacks for success and/or failure.</li>
+</ul>
+</div></section><section class="slide" data-pos="1-7-7">
+<span class="pos">1-7-7</span>
+<div class="slidecontent"><p>So instead of this...</p>
+<pre><code class="lang-javascript">readFile(path, (err, data) =&gt; {
+  <span class="hljs-keyword">if</span> (err) handleError(err);
+  <span class="hljs-keyword">else</span> handleData(data));
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-8">
+<span class="pos">1-7-8</span>
+<div class="slidecontent"><p>...we do this...</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> promise = readFile(path);
+promise.then(handleData);
+promise.catch(handleError);
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-9">
+<span class="pos">1-7-9</span>
+<div class="slidecontent"><p>...or simply chain it like this:</p>
+<pre><code class="lang-javascript">readFile(path)
+  .then(handleData)
+  .catch(handleError);
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-10">
+<span class="pos">1-7-10</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-comment">// with callback</span>
+readFile(path, (err, data) =&gt; err ? handleErr(err) : handleData(data));
+
+<span class="hljs-comment">// with promise</span>
+readFile(path).then(handleData).catch(handleError);
+</code></pre>
+<div class="angry">
+So a whole complicated abstraction<br/>
+just to save a few characters?!
+</div></div></section><section class="slide" data-pos="1-7-11">
+<span class="pos">1-7-11</span>
+<div class="slidecontent"><p>True. But more <strong>complex asynchronous flow control</strong> patterns can become much easier with promises.</p>
+</div></section><section class="slide" data-pos="1-7-12">
+<span class="pos">1-7-12</span>
+<div class="slidecontent"><p>For example, parallellising:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> data = {};
+
+<span class="hljs-keyword">const</span> maybeFinalize = <span class="hljs-function">(<span class="hljs-params">resp, which</span>) =&gt;</span> {
+  data[which] = resp;
+  <span class="hljs-keyword">if</span> (data.A &amp;&amp; data.B &amp;&amp; data.C) {
+    finalize(data.A, data,B, data.C);
+  }
+}
+
+fetch(urlA, resp =&gt; maybeFinalize(resp, <span class="hljs-string">'A'</span>));
+fetch(urlB, resp =&gt; maybeFinalize(resp, <span class="hljs-string">'A'</span>));
+fetch(urlC, resp =&gt; maybeFinalize(resp, <span class="hljs-string">'A'</span>));
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-13">
+<span class="pos">1-7-13</span>
+<div class="slidecontent"><p>With promises that could become:</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">Promise</span>.all([fetch(urlA), fetch(urlB), fetch(urlC)])
+  .then(finalize);
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-14">
+<span class="pos">1-7-14</span>
+<div class="slidecontent"><p>Promises are <strong>created</strong> like this:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    resolve(<span class="hljs-string">'3 seconds have passed!'</span>);
+  }, <span class="hljs-number">3000</span>);
+});
+</code></pre>
+</div></section><section class="slide" data-pos="1-7-15">
+<span class="pos">1-7-15</span>
+<div class="slidecontent"><p>Note that you <strong>rarely need to do that</strong>.</p>
+<p>Mostly we&#39;ll just use API:s that return promises.</p>
+</div></section><section class="slide" data-pos="1-7-16">
+<span class="pos">1-7-16</span>
+<div class="slidecontent"><pre><code class="lang-javascript">bigRedBtn.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
+</code></pre>
+<div class="angry">
+But a promise doesn&#39;t make sense<br/>
+when the callback can be called<br/>
+more than once!
+</div></div></section><section class="slide" data-pos="1-7-17">
+<span class="pos">1-7-17</span>
+<div class="slidecontent"><p>Very true! The promise can only represent a <strong>single asynchronous value</strong>.</p>
+<p>To represent <strong>many async values</strong> we can use a <strong>stream</strong>:</p>
+<p><img src="resources/1-7-17-137.svg" alt="dot"></p>
+<p>But that&#39;s a totally different story!</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-8.</span> Asynchronous functions</h3>
+      <p>Async await</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-8-1">
+<span class="pos">1-8-1</span>
+<div class="slidecontent"><p>What if we had a <strong>generator that yielded promises</strong>?</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> iterableWithCalls = {
+  [<span class="hljs-built_in">Symbol</span>.iterator]: <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>)</span>{
+    <span class="hljs-keyword">yield</span> fetch(<span class="hljs-string">"http://some.url"</span>); <span class="hljs-comment">// fetch returns promise</span>
+    <span class="hljs-keyword">yield</span> fetch(<span class="hljs-string">"http://another.url"</span>);
+    <span class="hljs-keyword">yield</span> fetch(<span class="hljs-string">"http://a.third.url"</span>);
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-2">
+<span class="pos">1-8-2</span>
+<div class="slidecontent"><p>You would have to do something like this:</p>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">performCalls</span>(<span class="hljs-params">iterableWithCalls</span>) </span>{
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> iterableWithCalls){
+    promise.then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
+      processData(data);
+    });
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-3">
+<span class="pos">1-8-3</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">performCalls</span>(<span class="hljs-params">iterableWithCalls</span>) </span>{
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> iterableWithCalls){
+    promise.then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
+      processData(data);
+    });
+  }
+}
+</code></pre>
+<div class="angry">
+Boo! Verbose!<br/>
+Inconvenient!
+</div></div></section><section class="slide" data-pos="1-8-4">
+<span class="pos">1-8-4</span>
+<div class="slidecontent"><p>Right?! That&#39;s what <strong><code>async/await</code></strong> fixes!</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">performCalls</span>(<span class="hljs-params">iterableWithCalls</span>) </span>{
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> iterableWithCalls){
+    <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">await</span> promise; <span class="hljs-comment">// execution will pause!</span>
+    processData(data); <span class="hljs-comment">// will execute when promise resolves</span>
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-5">
+<span class="pos">1-8-5</span>
+<div class="slidecontent"><p>And, the <strong>final return value</strong>...</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">performCalls</span>(<span class="hljs-params">iterableWithCalls</span>) </span>{
+  <span class="hljs-comment">// ...truncated code including lots of awaits...</span>
+
+  <span class="hljs-keyword">return</span> finalResult;
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-6">
+<span class="pos">1-8-6</span>
+<div class="slidecontent"><p>...is of course a <strong>promise</strong>! :D</p>
+<pre><code class="lang-javascript">performCalls(calls).then(<span class="hljs-function"><span class="hljs-params">finalResult</span> =&gt;</span> {
+  <span class="hljs-comment">// handle final result</span>
+})
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-7">
+<span class="pos">1-8-7</span>
+<div class="slidecontent"><p>As a <strong>minimal example</strong> - this code...</p>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInvocationOdds</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">'/api/alignedPlanet'</span>).then(<span class="hljs-function"><span class="hljs-params">planetId</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">`/api/planetFavourability/<span class="hljs-subst">${planetId}</span>`</span>).then(<span class="hljs-function"><span class="hljs-params">favourability</span> =&gt;</span> {
+      <span class="hljs-keyword">return</span> favourability * <span class="hljs-number">100</span>;
+    })
+  });
+}
+
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-8">
+<span class="pos">1-8-8</span>
+<div class="slidecontent"><p>...can be written as:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInvocationOdds</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> planetId = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'/api/alignedPlanet'</span>);
+  <span class="hljs-keyword">const</span> favourability = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">`/api/planetFavourability/<span class="hljs-subst">${planetId}</span>`</span>);
+  <span class="hljs-keyword">return</span> favourability * <span class="hljs-number">100</span>;
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-8-9">
+<span class="pos">1-8-9</span>
+<div class="slidecontent"><p>So - </p>
+<ul>
+<li><strong><code>async/await</code></strong> lets us <strong>write asynch code more neatly</strong>!</li>
+<li><strong><code>generators</code></strong> are used by <code>async/await</code> under the hood, but you&#39;ll <strong>rarely use them directly</strong>.</li>
+</ul>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-9.</span> Asynchronous generators</h3>
+      <p>completing the circle</p>
+    </div>
+  </section>
+  <section class="slide list" data-pos="1-9-1">
+<span class="pos">1-9-1</span>
+<div class="slidecontent">
+<p>In ES2018 we got <strong>asynchronous iteration</strong>! </p>
+<ul>
+<li><span>a</span>async iteration</li>
+<li><span>b</span>async <code>for</code> loop</li>
+<li><span>c</span>async generator</li>
+</ul>
+</div></section><section class="slide num numA" data-pos="1-9-2">
+<span class="pos">1-9-2</span>
+<div class="slidecontent">
+<p>Remember the synchronous <strong>iterator/iterable protocols</strong>? </p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> iterator = iterable[<span class="hljs-built_in">Symbol</span>.iterator]();
+<span class="hljs-keyword">const</span> { value, done } = iterator.next();
+<span class="hljs-comment">// do something with value/done</span>
+</code></pre>
+</div></section><section class="slide" data-pos="1-9-3">
+<span class="pos">1-9-3</span>
+<div class="slidecontent"><p>We now have <strong>async versions</strong> of that!</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> asyncIterator = asyncIterable[<span class="hljs-built_in">Symbol</span>.asyncIterator]();
+iterator.next().then(<span class="hljs-function">(<span class="hljs-params">{ value, done }</span>) =&gt;</span> <span class="hljs-comment">/* ...do something with value/done */</span>);
+</code></pre>
+</div></section><section class="slide num numB" data-pos="1-9-4">
+<span class="pos">1-9-4</span>
+<div class="slidecontent">
+<p>The async iterable is consumed <strong>async <code>for</code> loops</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> line <span class="hljs-keyword">of</span> readLines(filePath)){ <span class="hljs-comment">// readLines returns promises...</span>
+  <span class="hljs-built_in">console</span>.log(line); <span class="hljs-comment">// ...but we code as if it is sync!</span>
+}
+</code></pre>
+</div></section><section class="slide num numC" data-pos="1-9-5">
+<span class="pos">1-9-5</span>
+<div class="slidecontent">
+<p>Remember how <strong>generators</strong> let us create iterables more easily?</p>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">yield</span> <span class="hljs-string">"first"</span>;
+  <span class="hljs-keyword">yield</span> <span class="hljs-string">"last"</span>;
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-9-6">
+<span class="pos">1-9-6</span>
+<div class="slidecontent"><p>Meet <strong>async generators</strong>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params">path</span>) </span>{
+  <span class="hljs-keyword">let</span> file = <span class="hljs-keyword">await</span> fileOpen(path);
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">while</span> (!file.EOF) {
+      <span class="hljs-keyword">yield</span> <span class="hljs-keyword">await</span> file.readLine();
+    }
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">await</span> file.close();
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-9-7">
+<span class="pos">1-9-7</span>
+<div class="slidecontent"><p>So to <strong>create the async iterable</strong> we&#39;d do something like this:</p>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readLines</span>(<span class="hljs-params">path</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    [<span class="hljs-built_in">Symbol</span>.asyncIterator]: <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">let</span> file = <span class="hljs-keyword">await</span> fileOpen(path);
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">while</span> (!file.EOF) {
+          <span class="hljs-keyword">yield</span> <span class="hljs-keyword">await</span> file.readLine();
+        }
+      } <span class="hljs-keyword">finally</span> {
+        <span class="hljs-keyword">await</span> file.close();
+      }
+    }
+  }
+}
+</code></pre>
+</div></section><section class="slide" data-pos="1-9-8">
+<span class="pos">1-9-8</span>
+<div class="slidecontent"><p>(example stolen from the proposal docs)</p>
+</div></section>
+</section>
+<section class="chaptersection">
+  <section class="sectionheader">
+    <div>
+      <h3><span>1-10.</span> Learn more</h3>
+      <p>Link time!</p>
+    </div>
+  </section>
+  <section class="slide" data-pos="1-10-1">
+<span class="pos">1-10-1</span>
+<div class="slidecontent"><p>Docs at MDN:</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbols</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols">Iterable and iterator protocols</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">Promises</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*">Generator functions</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator">Generator objects</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators">Iterator and generator guide</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">Async functions</a></li>
+</ul>
+</div></section><section class="slide" data-pos="1-10-2">
+<span class="pos">1-10-2</span>
+<div class="slidecontent"><p>Fun fun functions videos by <strong>MPJ</strong>:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ategZqxHkz4">generators</a></li>
+<li><a href="https://www.youtube.com/watch?v=568g8hxJJp4&amp;vl=en-GB">async await</a></li>
+<li><a href="https://www.youtube.com/watch?v=ho5PnBOoacw">is async await useless?</a></li>
+</ul>
+</div></section><section class="slide" data-pos="1-10-3">
+<span class="pos">1-10-3</span>
+<div class="slidecontent"><p>Free e-books by Dr. Alex Rauschmayer</p>
+<ul>
+<li><a href="http://exploringjs.com/es6/">Exploring ES6 (ES2015)</a></li>
+<li><a href="http://exploringjs.com/es2016-es2017.html">Exploring ES2016-ES2017</a></li>
+<li><a href="http://exploringjs.com/es2018-es2019">Exploring ES2018-ES2019</a></li>
+</ul>
+</div></section><section class="slide" data-pos="1-10-4">
+<span class="pos">1-10-4</span>
+<div class="slidecontent"><pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span>
+<span class="hljs-title">async</span> <span class="hljs-title">function</span>
+<span class="hljs-title">function</span>*
+<span class="hljs-title">async</span> <span class="hljs-title">function</span>*</span>
+</code></pre>
+<div class="angry">
+My head hurts
+</div></div></section><section class="slide" data-pos="1-10-5">
+<span class="pos">1-10-5</span>
+<div class="slidecontent"><p>It is all just about letting us <strong>write async code more cleanly</strong>!</p>
+</div></section><section class="slide" data-pos="1-10-6">
+<span class="pos">1-10-6</span>
+<div class="slidecontent"><p>Also, <strong>forget the first half of the talk</strong>, since:</p>
+<p><img src="resources/1-10-6-53.svg" alt="dot"></p>
+</div></section><section class="slide" data-pos="1-10-7">
+<span class="pos">1-10-7</span>
+<div class="slidecontent"><p>Happy exploring! :D</p>
+<p> / David</p>
+</div></section>
+</section>
+
+  </div>
+  
+</div>
+
+  </div>
+  <div id="indexes">
+    <div class="lookupindex linklist">
+  <h2>External links</h2>
+  <div class="lookuplist">
+    <div><span>1-10-1</span><span>Async functions</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function</a></div><div><span>1-10-1</span><span>Generator functions</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*</a></div><div><span>1-10-1</span><span>Generator objects</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator</a></div><div><span>1-10-1</span><span>Iterable and iterator protocols</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols</a></div><div><span>1-10-1</span><span>Iterator and generator guide</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators</a></div><div><span>1-10-1</span><span>Promises</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises</a></div><div><span>1-10-1</span><span>Symbols</span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol</a></div><div><span>1-10-2</span><span>async await</span><a href="https://www.youtube.com/watch?v=568g8hxJJp4&amp;vl=en-GB">https://www.youtube.com/watch?v=568g8hxJJp4&amp;vl=en-GB</a></div><div><span>1-10-2</span><span>generators</span><a href="https://www.youtube.com/watch?v=ategZqxHkz4">https://www.youtube.com/watch?v=ategZqxHkz4</a></div><div><span>1-10-2</span><span>is async await useless?</span><a href="https://www.youtube.com/watch?v=ho5PnBOoacw">https://www.youtube.com/watch?v=ho5PnBOoacw</a></div><div><span>1-10-3</span><span>Exploring ES2016-ES2017</span><a href="http://exploringjs.com/es2016-es2017.html">http://exploringjs.com/es2016-es2017.html</a></div><div><span>1-10-3</span><span>Exploring ES2018-ES2019</span><a href="http://exploringjs.com/es2018-es2019">http://exploringjs.com/es2018-es2019</a></div><div><span>1-10-3</span><span>Exploring ES6 (ES2015)</span><a href="http://exploringjs.com/es6/">http://exploringjs.com/es6/</a></div>
+  </div>
+</div>
+
+  </div>
+</div>
+<script type="text/javascript" src="scripts/print-seminar.js"></script>
+</body>
+</html>
